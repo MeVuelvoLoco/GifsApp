@@ -16,11 +16,27 @@ export class GifsService {
     return [...this._tagsHistory];
   }
 
+  private organizeHistory (tag: string) {
+    tag = tag.toLowerCase();
+
+    if (this._tagsHistory.includes(tag) ) {
+      this._tagsHistory = this._tagsHistory.filter ( (oldTag) => oldTag !== tag ); // Devuelve array donde el tag (si existe en el array), no está incluido.
+    }
+
+    this._tagsHistory.unshift(tag); // Inserto el tag nuevo (si ya existía, se ha borrado del array en la línea superior.)
+
+    this._tagsHistory = this.tagsHistory.splice(0,10); // Limito el historial a 10 valores.
+
+  }
+
   public searchTag (tag : string): void {
+    if (tag.length === 0) return; //Para evitar vacíos en la lista
 
-    this._tagsHistory.unshift (tag);
+    this.organizeHistory (tag);
 
-    console.log(this.tagsHistory);
+    //this._tagsHistory.unshift (tag); // Al usar el organizeHistory, ya no es necesario.
+
+    //console.log(this.tagsHistory);
 
   }
 
