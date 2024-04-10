@@ -1,5 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Gif, SearchResponse } from '../components/interfaces/gifs.interfaces';
 
 //const GIPHYT_API_KEY = '';
 
@@ -7,6 +8,8 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class GifsService {
+
+  public gifList: Gif [] = [];
 
   private _tagsHistory: string[] =[];
   private serviceUrl:   string = 'https://api.giphy.com/v1/gifs';
@@ -67,10 +70,14 @@ export class GifsService {
       .set('q', tag)
 
     //this.http.get(`${ this.serviceUrl }/search`, { params: params}) // También vale para definir la llamada.
-    this.http.get(`${ this.serviceUrl }/search`, { params})
-    .subscribe( resp => {
+    this.http.get<SearchResponse>(`${ this.serviceUrl }/search`, { params})
+    .subscribe( (resp) => {
 
-      console.log(resp);
+      //console.log(resp.data);
+      //console.log(resp.patito); // Aunque esto esté definido en la interfaz, no fuerza a que lo usemos aquí.
+      this.gifList = resp.data;
+      console.log({ gifs: this.gifList});
+
     })
 
 
