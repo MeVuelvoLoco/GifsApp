@@ -1,4 +1,7 @@
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
+//const GIPHYT_API_KEY = '';
 
 @Injectable({
   providedIn: 'root'
@@ -6,8 +9,10 @@ import { Injectable } from '@angular/core';
 export class GifsService {
 
   private _tagsHistory: string[] =[];
+  private serviceUrl:   string = 'https://api.giphy.com/v1/gifs';
+  private apiKey:       string = 'R1ZvG5v33vGYrPu3p7aI84j0WL6QCGwU';
 
-  constructor() { }
+  constructor( private http: HttpClient) { }
 
 
   get tagsHistory() {
@@ -33,10 +38,41 @@ export class GifsService {
     if (tag.length === 0) return; //Para evitar vacíos en la lista
 
     this.organizeHistory (tag);
-
     //this._tagsHistory.unshift (tag); // Al usar el organizeHistory, ya no es necesario.
 
     //console.log(this.tagsHistory);
+
+    // VERSION 1
+    //fetch('https://api.giphy.com/v1/gifs/search?api_key=R1ZvG5v33vGYrPu3p7aI84j0WL6QCGwU&q=Valorant&limit=10')
+    //  .then ( resp => resp.json())
+    //  .then ( data => console.log (data));
+
+    // VERSION 2
+    // Esto es exactamente lo mismo que lo de las líneas superiores pero tenemos que poner esta cabecera de función: public async searchTag (tag : string): Promise<void> {
+    //const resp = await fetch('https://api.giphy.com/v1/gifs/search?api_key=R1ZvG5v33vGYrPu3p7aI84j0WL6QCGwU&q=Valorant&limit=10');
+    //const data = await resp.json ();
+    //console.log (data);
+
+    // VERSION 3
+    // Usamos HttpClientModule y lo colocamos en los imports del app.module para usarlo en toda la aplicación.
+    // Habilita todo lo que ese módulo exporta para poder usarlo nosotros, como aquí:
+    //this.http.get('https://api.giphy.com/v1/gifs/search?api_key=R1ZvG5v33vGYrPu3p7aI84j0WL6QCGwU&q=Valorant&limit=10')
+    //  .subscribe( resp => {
+    //    console.log(resp);
+    //  })
+
+    const params = new HttpParams()
+      .set('api_key', this.apiKey)
+      .set('limit', '10')
+      .set('q', tag)
+
+    //this.http.get(`${ this.serviceUrl }/search`, { params: params}) // También vale para definir la llamada.
+    this.http.get(`${ this.serviceUrl }/search`, { params})
+    .subscribe( resp => {
+
+      console.log(resp);
+    })
+
 
   }
 
