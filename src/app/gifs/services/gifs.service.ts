@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Gif, SearchResponse } from '../components/interfaces/gifs.interfaces';
+import { Gif, SearchResponse } from '../interfaces/gifs.interfaces';
 
 //const GIPHYT_API_KEY = '';
 
@@ -76,7 +76,7 @@ export class GifsService {
       //console.log(resp.data);
       //console.log(resp.patito); // Aunque esto esté definido en la interfaz, no fuerza a que lo usemos aquí.
       this.gifList = resp.data;
-      console.log({ gifs: this.gifList});
+      //console.log({ gifs: this.gifList});
 
     })
 
